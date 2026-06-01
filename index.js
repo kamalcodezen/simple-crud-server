@@ -89,8 +89,6 @@ const run = async () => {
             }
             const result = await userCollection.updateOne(filter, updatedDocument)
             res.send(result)
-
-
         })
 
 
