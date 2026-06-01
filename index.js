@@ -1,7 +1,7 @@
 const express = require("express")
 const app = express();
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
 
@@ -28,12 +28,29 @@ const run = async () => {
         const db = client.db("simpleCrud")
         const userCollection = db.collection("users")
 
+        // All users data
         app.get("/users", async (req, res) => {
             const cursor = userCollection.find();
             const result = await cursor.toArray()
             res.send(result)
-
         })
+
+        // single users Data by id
+        app.get("/users/:id", async (req, res) => {
+
+            // console.log(req.params.id)
+            const id = req.params.id
+            const query = {
+                _id: new ObjectId(id)
+            }
+            const user = await userCollection.findOne(query)
+            console.log(user)
+            res.send(user)
+        })
+
+
+
+
 
 
         await client.db("admin").command({ ping: 1 });
